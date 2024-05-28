@@ -18,11 +18,13 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity(name = "assignment")
+@Entity(name = "assignments")
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -41,6 +43,7 @@ public class Assignment {
     @Temporal(TemporalType.DATE)
     private Date dueDate;
 
+    // entregas
     @OneToMany(
         fetch = FetchType.EAGER,
         mappedBy = "assignment",
@@ -51,6 +54,7 @@ public class Assignment {
     @EqualsAndHashCode.Exclude
     private List<Submission> submissions;
 
+    // Lesson
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lesson_id", referencedColumnName = "id")
     private Lesson lesson;
