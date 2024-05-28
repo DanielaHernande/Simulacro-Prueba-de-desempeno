@@ -2,16 +2,17 @@ package com.riwi.Simulacro_Spring_Boot.domain.entities;
 
 import java.util.List;
 
+import com.riwi.Simulacro_Spring_Boot.utils.enums.Role;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,57 +20,73 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity(name = "course")
+@Entity(name = "user")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Course {
+public class UserEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 50, nullable = false)
+    private String username;
+
+    @Column(length = 255, nullable = false)
+    private String password;
+
     @Column(length = 100, nullable = false)
-    private String courseName;
+    private String email;
 
-    @Lob
-    private String description;
+    @Column(length = 100)
+    private String fullName;
 
-    // Leccion
+    @Enumerated(EnumType.STRING)
+    @Column(length = 50, nullable = false)
+    private Role role;
+
+    // Courses
     @OneToMany(
         fetch = FetchType.EAGER,
-        mappedBy = "course",
+        mappedBy = "userEntity",
         cascade = CascadeType.ALL,
         orphanRemoval = false
     )
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<Lesson> lessons;
+    private List<Course> courses;
+
+    // submissions
+    @OneToMany(
+        fetch = FetchType.EAGER,
+        mappedBy = "userEntity",
+        cascade = CascadeType.ALL,
+        orphanRemoval = false
+    )
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Submission> submissions;
 
     // Mensajes
     @OneToMany(
         fetch = FetchType.EAGER,
-        mappedBy = "course",
+        mappedBy = "userSender",
         cascade = CascadeType.ALL,
         orphanRemoval = false
     )
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<Message> messages;
+    private List<Message> messageSender;
 
-    // Enrollment
+    // Mensajes
     @OneToMany(
         fetch = FetchType.EAGER,
-        mappedBy = "course",
+        mappedBy = "userReceiver",
         cascade = CascadeType.ALL,
         orphanRemoval = false
     )
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<Enrollment> enrollments;
-
-    // Usuario
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "instructor_id", referencedColumnName = "id")
-    private UserEntity userEntity;
+    private List<Message> messageReceiver;
 }
