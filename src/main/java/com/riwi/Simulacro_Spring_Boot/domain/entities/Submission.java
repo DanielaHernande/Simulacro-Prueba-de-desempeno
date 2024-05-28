@@ -15,10 +15,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "submission")
+@Entity(name = "submissions")
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,7 +44,7 @@ public class Submission {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity userEntity;
 
-    // Assignment
+    // Assignment - Tarea
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignment_id", referencedColumnName = "id")
     private Assignment assignment;
