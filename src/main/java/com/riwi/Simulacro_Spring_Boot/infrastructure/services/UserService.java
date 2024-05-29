@@ -60,8 +60,7 @@ public class UserService implements IUserService{
         PageRequest pagination = PageRequest.of(page, size);
 
         return this.userRepository.findAll(pagination)
-                .map(user -> this.entityToResponse(user));
-            
+                .map(user -> this.entityToResponse(user));     
     }
 
     // Obtener por id
@@ -79,7 +78,6 @@ public class UserService implements IUserService{
         UserResp response = new UserResp();
 
         BeanUtils.copyProperties(entity, response);
-
         return response;
     }
 }
