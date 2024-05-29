@@ -4,6 +4,7 @@ import com.riwi.Simulacro_Spring_Boot.utils.enums.Role;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,6 +44,6 @@ public class UserReq {
     )
     private String fullName;
 
-    @NotBlank(message = "El Rol es requerido")
+    @NotNull(message = "El Rol es requerido")
     private Role role;
 }

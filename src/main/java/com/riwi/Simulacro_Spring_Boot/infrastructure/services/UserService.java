@@ -85,13 +85,21 @@ public class UserService implements IUserService{
         UserResp response = new UserResp();
 
         BeanUtils.copyProperties(entity, response);
-
-        response.setCourses(entity.getCourses().stream()
+        
+        if (entity.getCourses() != null) {
+            
+            response.setCourses(entity.getCourses().stream()
                 .map(course -> this.courseToResponse(course))
                 .collect(Collectors.toList()));
 
+        } else {
+
+            response.setCourses(new ArrayList<>());
+        }
+        
         return response;
     }
+    
 
      // Para convertir CourseBasicResp a cursos
     private CourseBasicResp courseToResponse(Course entity) {
