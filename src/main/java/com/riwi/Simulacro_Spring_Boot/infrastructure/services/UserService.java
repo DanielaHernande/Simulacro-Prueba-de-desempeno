@@ -42,8 +42,8 @@ public class UserService implements IUserService{
     // Obtener solo uno
     @Override
     public UserResp get(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+
+        return this.entityToResponse(this.findId(id));
     }
 
     // Actualizar
