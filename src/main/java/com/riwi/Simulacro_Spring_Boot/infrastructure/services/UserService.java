@@ -3,8 +3,10 @@ package com.riwi.Simulacro_Spring_Boot.infrastructure.services;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -113,5 +115,11 @@ public class UserService implements IUserService{
                 .fullName(request.getFullName())
                 .role(request.getRole())
                 .build();
+    }
+
+    private UserEntity findId(Long id) {
+
+        return this.userRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("No hay usuarios con este id"));
     }
 }
