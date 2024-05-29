@@ -3,10 +3,9 @@ package com.riwi.Simulacro_Spring_Boot.infrastructure.services;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import org.apache.coyote.BadRequestException;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -19,6 +18,7 @@ import com.riwi.Simulacro_Spring_Boot.domain.entities.UserEntity;
 import com.riwi.Simulacro_Spring_Boot.domain.repositories.UserRepository;
 import com.riwi.Simulacro_Spring_Boot.infrastructure.abstract_services.IUserService;
 //import com.riwi.Simulacro_Spring_Boot.utils.enums.SortType;
+import com.riwi.Simulacro_Spring_Boot.utils.exceptions.BadRequestException;
 
 import lombok.AllArgsConstructor;
 
@@ -75,8 +75,8 @@ public class UserService implements IUserService{
     // Obtener por id
     @Override
     public UserResp getById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getById'");
+
+        return this.entityToResponse(findId(id));
     }
 
     // Metodos privados
@@ -128,6 +128,6 @@ public class UserService implements IUserService{
     private UserEntity findId(Long id) {
 
         return this.userRepository.findById(id)
-                .orElseThrow(() -> new BadRequestException("No hay usuarios con este id"));
+                .orElseThrow(() -> new BadRequestException("No hay usuarios con ese id"));
     }
 }
