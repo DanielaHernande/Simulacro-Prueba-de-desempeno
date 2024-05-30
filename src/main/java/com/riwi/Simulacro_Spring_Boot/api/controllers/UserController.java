@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -52,6 +53,15 @@ public class UserController {
             @Validated @RequestBody UserReq request) {
 
         return ResponseEntity.ok(this.userService.create(request));
+    }
+
+    // Actualizar
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<UserResp> update(
+            @Validated @RequestBody UserReq request,
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(this.userService.update(request, id));
     }
 
     // Eliminar
