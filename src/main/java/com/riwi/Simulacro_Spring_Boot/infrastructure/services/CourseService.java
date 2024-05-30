@@ -29,11 +29,14 @@ public class CourseService implements ICourseService{
     @Autowired
     private final CourseRepository courseRepository;
 
+
     // Crear
     @Override
     public CourseResp create(CourseReq request) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
+
+        Course course = this.requestToEntity(request);
+
+        return this.entityToResponse(this.courseRepository.save(course));
     }
 
     // Obtener solo uno por id
@@ -90,6 +93,14 @@ public class CourseService implements ICourseService{
                 .courseName(entity.getCourseName())
                 .description(entity.getDescription())
                 .userEntity(userResp)
+                .build();
+    }
+
+    private Course requestToEntity(CourseReq requets) {
+
+        return Course.builder()
+                .courseName(requets.getCourseName())
+                .description(requets.getDescription())
                 .build();
     }
 }
