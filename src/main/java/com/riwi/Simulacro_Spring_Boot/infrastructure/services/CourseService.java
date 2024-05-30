@@ -66,7 +66,7 @@ public class CourseService implements ICourseService{
 
         if (page < 0) page = 1;
 
-        PageRequest pagination = PageRequest.of(page, size);
+        PageRequest pagination = PageRequest.of(page - 1, size);
 
         return this.courseRepository.findAll(pagination)
                 .map(this::entityToResponse);
@@ -85,9 +85,15 @@ public class CourseService implements ICourseService{
     // Convertir
     private CourseResp entityToResponse(Course entity) {
 
-        UserBasicResp userResp = new UserBasicResp();
-        BeanUtils.copyProperties(entity.getUserEntity(), userResp);
+        UserBasicResp userResp = null;
 
+        if (entity.getUserEntity() != null) {
+
+            userResp = new UserBasicResp();
+
+            BeanUtils.copyProperties(entity.getUserEntity(), userResp);
+        }
+    
         return CourseResp.builder()
                 .id(entity.getId())
                 .courseName(entity.getCourseName())
@@ -95,6 +101,7 @@ public class CourseService implements ICourseService{
                 .userEntity(userResp)
                 .build();
     }
+    
 
     private Course requestToEntity(CourseReq requets) {
 
