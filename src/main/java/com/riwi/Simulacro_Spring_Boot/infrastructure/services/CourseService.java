@@ -11,9 +11,11 @@ import com.riwi.Simulacro_Spring_Boot.api.dto.response.CourseResp;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.UserBasicResp;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.UserResp;
 import com.riwi.Simulacro_Spring_Boot.domain.entities.Course;
+import com.riwi.Simulacro_Spring_Boot.domain.entities.UserEntity;
 import com.riwi.Simulacro_Spring_Boot.domain.repositories.CourseRepository;
 import com.riwi.Simulacro_Spring_Boot.domain.repositories.UserRepository;
 import com.riwi.Simulacro_Spring_Boot.infrastructure.abstract_services.ICourseService;
+import com.riwi.Simulacro_Spring_Boot.utils.exceptions.BadRequestException;
 
 import lombok.AllArgsConstructor;
 
@@ -34,7 +36,12 @@ public class CourseService implements ICourseService{
     @Override
     public CourseResp create(CourseReq request) {
 
+        UserEntity user = this.userRepository.findById(request.getUserId())
+                    .orElseThrow(() -> new BadRequestException("No hay usuarios con ese id"));
+
         Course course = this.requestToEntity(request);
+
+        course.setUserEntity(user);
 
         return this.entityToResponse(this.courseRepository.save(course));
     }
