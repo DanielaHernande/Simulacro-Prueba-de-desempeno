@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.riwi.Simulacro_Spring_Boot.api.dto.request.CourseReq;
 import com.riwi.Simulacro_Spring_Boot.api.dto.request.LessonReq;
-import com.riwi.Simulacro_Spring_Boot.api.dto.response.CourseResp;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.LessonResp;
 import com.riwi.Simulacro_Spring_Boot.infrastructure.abstract_services.ILessonService;
 
@@ -40,6 +38,7 @@ public class LessonController {
         return ResponseEntity.ok(this.lessonService.getAll(page - 1, size));
     }
 
+    // Obtener uno solo
     @GetMapping(path = "/{id}")
     public ResponseEntity<LessonResp> get(
             @PathVariable Long id) {

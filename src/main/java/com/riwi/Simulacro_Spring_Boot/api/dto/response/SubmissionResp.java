@@ -24,5 +24,5 @@ public class SubmissionResp {
 
     // Tarea
     //@JsonManagedReference
-    private AssignmentBasicResp assignment;
+    private AssignmentResp assignment;
 }
