@@ -57,8 +57,18 @@ public class AssignmentService implements IAssignmentService{
     // Actualizar
     @Override
     public AssignmentResp update(AssignmentReq request, Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+
+        Assignment assignment = this.find(id);
+
+        // Obtener el usuario
+        Lesson lesson = this.lessonRepository.findById(request.getLessonId())
+                    .orElseThrow(() -> new BadRequestException("No hay una leccion con ese id suministrado"));
+
+        assignment = this.requestToEntity(request);
+
+        assignment.setLesson(lesson);
+
+        return this.entityToResponse(this.assignmentRepository.save(assignment));
     }
 
     // Eliminar
