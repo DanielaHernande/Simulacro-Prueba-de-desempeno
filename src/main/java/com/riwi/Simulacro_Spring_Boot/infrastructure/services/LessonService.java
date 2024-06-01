@@ -71,8 +71,8 @@ public class LessonService implements ILessonService{
     // Eliminar
     @Override
     public void delete(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+
+        this.lessonRepository.delete(this.find(id));
     }
 
     // Obtener todas las lesson
@@ -86,7 +86,6 @@ public class LessonService implements ILessonService{
         return this.lessonRepository.findAll(pagination)
                 .map(this::entityToResponse);
     }
-
 
     // Metodos privados
     
