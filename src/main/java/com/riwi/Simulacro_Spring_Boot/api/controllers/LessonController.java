@@ -7,11 +7,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.riwi.Simulacro_Spring_Boot.api.dto.request.CourseReq;
 import com.riwi.Simulacro_Spring_Boot.api.dto.request.LessonReq;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.CourseResp;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.LessonResp;
@@ -51,6 +53,15 @@ public class LessonController {
             @Validated @RequestBody LessonReq request) {
 
         return ResponseEntity.ok(this.lessonService.create(request));
+    }
+
+    // Actualizar
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<LessonResp> update(
+            @Validated @RequestBody LessonReq request,
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(this.lessonService.update(request, id));
     }
     
 }
