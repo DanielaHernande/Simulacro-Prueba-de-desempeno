@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,14 @@ public class CourseController {
             @RequestParam(defaultValue = "10") int size
             ) {
         return ResponseEntity.ok(this.courseService.getAll(page, size));
+    }
+
+    // Obtener por id
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<CourseResp> get(
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(this.courseService.get(id));
     }
 
     // Crear 
