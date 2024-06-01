@@ -51,8 +51,8 @@ public class CourseService implements ICourseService{
     // Obtener solo uno por id
     @Override
     public CourseResp get(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+
+        return this.entityToResponse(this.find(id));
     }
 
     // Actualizar
@@ -115,5 +115,12 @@ public class CourseService implements ICourseService{
                 .courseName(requets.getCourseName())
                 .description(requets.getDescription())
                 .build();
+    }
+
+    // Buscar por id
+    private Course find(Long id) {
+
+        return this.courseRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("No hay cursos con el id suministrado"));
     }
 }
