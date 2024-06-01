@@ -39,8 +39,8 @@ public class AssignmentService implements IAssignmentService{
     // Obtener solo uno
     @Override
     public AssignmentResp get(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+        
+        return this.entityToResponse(this.find(id));
     }
 
     // Actualizar
