@@ -11,7 +11,6 @@ import com.riwi.Simulacro_Spring_Boot.api.dto.response.CourseBasicResp;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.LessonResp;
 import com.riwi.Simulacro_Spring_Boot.domain.entities.Course;
 import com.riwi.Simulacro_Spring_Boot.domain.entities.Lesson;
-import com.riwi.Simulacro_Spring_Boot.domain.entities.UserEntity;
 import com.riwi.Simulacro_Spring_Boot.domain.repositories.CourseRepository;
 import com.riwi.Simulacro_Spring_Boot.domain.repositories.LessonRepository;
 import com.riwi.Simulacro_Spring_Boot.infrastructure.abstract_services.ILessonService;
