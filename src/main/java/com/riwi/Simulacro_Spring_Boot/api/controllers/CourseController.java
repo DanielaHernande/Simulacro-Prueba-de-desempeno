@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.riwi.Simulacro_Spring_Boot.api.dto.request.CourseReq;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.CourseResp;
-import com.riwi.Simulacro_Spring_Boot.domain.entities.Course;
 import com.riwi.Simulacro_Spring_Boot.infrastructure.abstract_services.ICourseService;
 
 import lombok.AllArgsConstructor;
