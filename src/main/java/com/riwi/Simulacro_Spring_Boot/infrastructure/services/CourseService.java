@@ -76,8 +76,8 @@ public class CourseService implements ICourseService{
     // ELiminar
     @Override
     public void delete(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+
+        this.courseRepository.delete(this.find(id));
     }
 
     // Obtener todo
