@@ -32,8 +32,19 @@ public class AssignmentService implements IAssignmentService{
     // Crear
     @Override
     public AssignmentResp create(AssignmentReq request) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
+
+        // btener la lección
+        Lesson lesson = this.lessonRepository.findById(request.getLessonId())
+                    .orElseThrow(() -> new BadRequestException("No hay una leccion con ese id"));
+
+        // tarea
+        Assignment assignment = this.requestToEntity(request);
+
+        // Asignar la lección a la tarea
+        assignment.setLesson(lesson);
+
+        // Guardar la tarea en el repositorio de asignaciones
+        return this.entityToResponse(this.assignmentRepository.save(assignment));
     }
 
     // Obtener solo uno
