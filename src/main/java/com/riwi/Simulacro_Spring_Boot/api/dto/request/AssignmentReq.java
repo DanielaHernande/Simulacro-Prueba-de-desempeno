@@ -1,5 +1,7 @@
 package com.riwi.Simulacro_Spring_Boot.api.dto.request;
 
+import java.util.Date;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,6 +26,8 @@ public class AssignmentReq {
     private String assignmentTitle;
 
     private String description;
+
+    private Date dueDate;
 
     // Lecciones
     @NotNull(message = "El id de la leccion es obligatorio")
