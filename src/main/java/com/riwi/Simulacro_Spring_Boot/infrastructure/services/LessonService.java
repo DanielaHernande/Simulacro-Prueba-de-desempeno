@@ -48,8 +48,8 @@ public class LessonService implements ILessonService{
     // Obtener solo uno
     @Override
     public LessonResp get(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+
+        return this.entityToResponse(find(id));
     }
 
     // Actualizar 
@@ -105,6 +105,13 @@ public class LessonService implements ILessonService{
                 .lessonTitle(requets.getLessonTitle())
                 .content(requets.getContent())
                 .build();
+    }
+
+    // Buscar por id
+    private Lesson find(Long id) {
+
+        return this.lessonRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("No hay lesson con el id suministrado"));
     }
     
 }
