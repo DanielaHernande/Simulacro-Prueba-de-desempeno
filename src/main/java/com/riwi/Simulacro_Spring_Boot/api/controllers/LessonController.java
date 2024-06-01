@@ -39,6 +39,7 @@ public class LessonController {
         return ResponseEntity.ok(this.lessonService.getAll(page - 1, size));
     }
 
+    // Obtener uno solo
     @GetMapping(path = "/{id}")
     public ResponseEntity<LessonResp> get(
             @PathVariable Long id) {
