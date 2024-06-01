@@ -9,10 +9,13 @@ import org.springframework.stereotype.Service;
 import com.riwi.Simulacro_Spring_Boot.api.dto.request.LessonReq;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.CourseBasicResp;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.LessonResp;
+import com.riwi.Simulacro_Spring_Boot.domain.entities.Course;
 import com.riwi.Simulacro_Spring_Boot.domain.entities.Lesson;
+import com.riwi.Simulacro_Spring_Boot.domain.entities.UserEntity;
 import com.riwi.Simulacro_Spring_Boot.domain.repositories.CourseRepository;
 import com.riwi.Simulacro_Spring_Boot.domain.repositories.LessonRepository;
 import com.riwi.Simulacro_Spring_Boot.infrastructure.abstract_services.ILessonService;
+import com.riwi.Simulacro_Spring_Boot.utils.exceptions.BadRequestException;
 
 import lombok.AllArgsConstructor;
 
@@ -31,8 +34,15 @@ public class LessonService implements ILessonService{
     // Create
     @Override
     public LessonResp create(LessonReq request) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
+        
+        Course course = this.courseRepository.findById(request.getCourseId())
+                    .orElseThrow(() -> new BadRequestException("No hay cursos con ese id"));
+
+        Lesson lesson = this.requestToEntity(request);
+
+        lesson.setCourse(course);
+
+        return this.entityToResponse(this.lessonRepository.save(lesson));
     }
 
     // Obtener solo uno
@@ -86,6 +96,14 @@ public class LessonService implements ILessonService{
                 .lessonTitle(entity.getLessonTitle())
                 .content(entity.getContent())
                 .course(course)
+                .build();
+    }
+
+    private Lesson requestToEntity(LessonReq requets) {
+
+        return Lesson.builder()
+                .lessonTitle(requets.getLessonTitle())
+                .content(requets.getContent())
                 .build();
     }
     
