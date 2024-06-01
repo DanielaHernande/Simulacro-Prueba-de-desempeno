@@ -17,7 +17,7 @@ public class LessonReq {
     
     @NotBlank(message = "EL titulo de la leccion es obligatorio")
     @Size(
-        min = 10,
+        min = 3,
         max = 100,
         message = "EL titulo debe de tener entre 10y 100 caracteres"
     )
