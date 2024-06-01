@@ -55,8 +55,17 @@ public class LessonService implements ILessonService{
     // Actualizar 
     @Override
     public LessonResp update(LessonReq request, Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+
+        Lesson lesson = this.find(id);
+
+        Course course = this.courseRepository.findById(request.getCourseId())
+        .orElseThrow(() -> new BadRequestException("No hay un curso con ese id suministrado"));
+
+        lesson = this.requestToEntity(request);
+
+        lesson.setCourse(course);
+
+        return this.entityToResponse(this.lessonRepository.save(lesson));
     }
 
     // Eliminar
