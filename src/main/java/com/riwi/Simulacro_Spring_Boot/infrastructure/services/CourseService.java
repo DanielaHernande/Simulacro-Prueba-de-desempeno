@@ -36,9 +36,11 @@ public class CourseService implements ICourseService{
     @Override
     public CourseResp create(CourseReq request) {
 
+        // 
         UserEntity user = this.userRepository.findById(request.getUserId())
                     .orElseThrow(() -> new BadRequestException("No hay usuarios con ese id"));
 
+        // curso
         Course course = this.requestToEntity(request);
 
         course.setUserEntity(user);
@@ -92,24 +94,21 @@ public class CourseService implements ICourseService{
     // Convertir
     private CourseResp entityToResponse(Course entity) {
 
-        UserBasicResp userResp = null;
+        UserBasicResp user = new UserBasicResp();
 
+        // Validar que el usuario es nulo 
         if (entity.getUserEntity() != null) {
-
-            userResp = new UserBasicResp();
-
-            BeanUtils.copyProperties(entity.getUserEntity(), userResp);
+            BeanUtils.copyProperties(entity.getUserEntity(), user);
         }
-    
+
         return CourseResp.builder()
                 .id(entity.getId())
                 .courseName(entity.getCourseName())
                 .description(entity.getDescription())
-                .userEntity(userResp)
+                .userEntity(user)
                 .build();
     }
     
-
     private Course requestToEntity(CourseReq requets) {
 
         return Course.builder()
