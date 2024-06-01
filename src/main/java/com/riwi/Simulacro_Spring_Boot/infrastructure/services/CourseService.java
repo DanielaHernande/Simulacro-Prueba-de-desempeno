@@ -58,8 +58,19 @@ public class CourseService implements ICourseService{
     // Actualizar
     @Override
     public CourseResp update(CourseReq request, Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+
+        Course course = this.find(id);
+
+        // Obtener el usuario
+        UserEntity user = this.userRepository.findById(request.getUserId())
+                    .orElseThrow(() -> new BadRequestException("No ha un usuario con ese id suministrado"));
+
+        course = this.requestToEntity(request);
+
+        course.setUserEntity(user);
+
+        return this.entityToResponse(this.courseRepository.save(course));
+    
     }
 
     // ELiminar
