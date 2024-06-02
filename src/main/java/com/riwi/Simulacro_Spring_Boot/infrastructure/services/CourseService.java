@@ -67,6 +67,8 @@ public class CourseService implements ICourseService{
 
         course = this.requestToEntity(request);
 
+        course.setCourseName(request.getCourseName());
+        course.setDescription(request.getDescription());
         course.setUserEntity(user);
 
         return this.entityToResponse(this.courseRepository.save(course));
