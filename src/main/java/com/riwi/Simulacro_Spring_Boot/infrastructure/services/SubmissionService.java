@@ -75,9 +75,9 @@ public class SubmissionService implements ISubmissionService{
         Assignment assignment = this.assignmentRepository.findById(request.getAssignmentId())
                     .orElseThrow(() -> new BadRequestException("No ha un usuario con ese id suministrado"));
 
-        submission = this.requestToEntity(request);
-
-
+        submission.setContent(request.getContent());
+        submission.setSubmissionDate(request.getSubmissionDate());
+        submission.setGrade(request.getGrade());
         submission.setUserEntity(user);
         submission.setAssignment(assignment);
 
@@ -118,7 +118,7 @@ public class SubmissionService implements ISubmissionService{
 
         // Validar que el usuario es nulo 
         if (entity.getAssignment() != null) {
-            BeanUtils.copyProperties(entity.getAssignment(), user);
+            BeanUtils.copyProperties(entity.getAssignment(), assignment);
         }
 
         return SubmissionResp.builder()
