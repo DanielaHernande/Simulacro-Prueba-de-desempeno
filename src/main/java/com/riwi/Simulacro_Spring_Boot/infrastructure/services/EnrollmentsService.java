@@ -41,9 +41,11 @@ public class EnrollmentsService implements IEnrollmentsService{
     @Override
     public EnrollmentResp create(EnrollmentReq request) {
 
+        // user
         UserEntity user = this.userRepository.findById(request.getUserId())
             .orElseThrow(() -> new BadRequestException("No hay usuarios con ese id"));
 
+        // Course
         Course course = this.courseRepository.findById(request.getCourseId())
             .orElseThrow(() -> new BadRequestException("No hay cursos con ese id"));
 
@@ -59,22 +61,37 @@ public class EnrollmentsService implements IEnrollmentsService{
     // Obtener solo uno
     @Override
     public EnrollmentResp get(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+
+        return this.entityToResponse(this.find(id));
     }
 
     // Actualizar
     @Override
     public EnrollmentResp update(EnrollmentReq request, Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+
+        Enrollment enrollment = this.find(id);
+
+        // Obtener el usuario
+        UserEntity user = this.userRepository.findById(request.getUserId())
+                    .orElseThrow(() -> new BadRequestException("No ha un usuario con ese id suministrado"));
+
+        // Obtener el usuario
+        Course course = this.courseRepository.findById(request.getCourseId())
+                    .orElseThrow(() -> new BadRequestException("No ha un usuario con ese id suministrado"));
+
+        enrollment = this.requestToEntity(request);
+
+        enrollment.setCourse(course);
+        enrollment.setUserEntity(user);
+
+        return this.entityToResponse(this.enrollmentRepository.save(enrollment));
     }
 
     // Eliminar
     @Override
     public void delete(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+
+        this.enrollmentRepository.delete(this.find(id));
     }
 
     // Obtener todo
