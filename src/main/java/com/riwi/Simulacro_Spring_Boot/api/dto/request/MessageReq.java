@@ -1,6 +1,6 @@
 package com.riwi.Simulacro_Spring_Boot.api.dto.request;
 
-import java.util.Date;
+import java.sql.Date;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;

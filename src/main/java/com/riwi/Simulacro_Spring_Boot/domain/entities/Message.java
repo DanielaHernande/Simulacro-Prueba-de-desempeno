@@ -1,6 +1,6 @@
 package com.riwi.Simulacro_Spring_Boot.domain.entities;
 
-import java.util.Date;
+import java.sql.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
