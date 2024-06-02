@@ -10,7 +10,9 @@ import com.riwi.Simulacro_Spring_Boot.api.dto.request.EnrollmentReq;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.CourseBasicResp;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.EnrollmentResp;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.UserBasicResp;
+import com.riwi.Simulacro_Spring_Boot.domain.entities.Course;
 import com.riwi.Simulacro_Spring_Boot.domain.entities.Enrollment;
+import com.riwi.Simulacro_Spring_Boot.domain.entities.UserEntity;
 import com.riwi.Simulacro_Spring_Boot.domain.repositories.CourseRepository;
 import com.riwi.Simulacro_Spring_Boot.domain.repositories.EnrollmentRepository;
 import com.riwi.Simulacro_Spring_Boot.domain.repositories.UserRepository;
@@ -38,8 +40,20 @@ public class EnrollmentsService implements IEnrollmentsService{
     // Crear
     @Override
     public EnrollmentResp create(EnrollmentReq request) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
+
+        UserEntity user = this.userRepository.findById(request.getUserId())
+            .orElseThrow(() -> new BadRequestException("No hay usuarios con ese id"));
+
+        Course course = this.courseRepository.findById(request.getCourseId())
+            .orElseThrow(() -> new BadRequestException("No hay cursos con ese id"));
+
+        // Tarea
+        Enrollment enrollment = this.requestToEntity(request);
+
+        enrollment.setCourse(course);
+        enrollment.setUserEntity(user);
+
+        return this.entityToResponse(this.enrollmentRepository.save(enrollment));
     }
 
     // Obtener solo uno
