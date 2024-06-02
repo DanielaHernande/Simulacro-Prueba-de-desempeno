@@ -148,6 +148,7 @@ public class MessageService implements IMessageService{
                 .sentDate(entity.getSentDate())
                 .userReceiver(userReceiver)
                 .userSender(userSender)
+                .course(course)
                 .build();
     }
     
