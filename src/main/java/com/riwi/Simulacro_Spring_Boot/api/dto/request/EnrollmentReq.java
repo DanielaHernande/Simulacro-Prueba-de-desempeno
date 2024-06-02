@@ -4,7 +4,6 @@ import java.util.Date;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class EnrollmentReq {
     
     @FutureOrPresent(message = "La fecha no debe ser del pasado")
-    @NotBlank(message = "La fecha de la inscripcion es requerida")
+    @NotNull(message = "La fecha de la inscripcion es requerida")
     private Date enrollmentDate;
 
     // User
