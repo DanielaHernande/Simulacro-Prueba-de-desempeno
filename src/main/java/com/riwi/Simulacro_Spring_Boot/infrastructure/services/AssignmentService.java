@@ -76,8 +76,8 @@ public class AssignmentService implements IAssignmentService{
     // Eliminar
     @Override
     public void delete(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        
+        this.assignmentRepository.delete(this.find(id));
     }
 
     // Obtener todo
