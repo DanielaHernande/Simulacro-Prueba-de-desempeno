@@ -1,5 +1,9 @@
 package com.riwi.Simulacro_Spring_Boot.infrastructure.services;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +21,7 @@ import com.riwi.Simulacro_Spring_Boot.domain.repositories.CourseRepository;
 import com.riwi.Simulacro_Spring_Boot.domain.repositories.MessageRepository;
 import com.riwi.Simulacro_Spring_Boot.domain.repositories.UserRepository;
 import com.riwi.Simulacro_Spring_Boot.infrastructure.abstract_services.IMessageService;
+import com.riwi.Simulacro_Spring_Boot.infrastructure.helpers.EmailHelper;
 import com.riwi.Simulacro_Spring_Boot.utils.exceptions.BadRequestException;
 
 import lombok.AllArgsConstructor;
@@ -36,6 +41,10 @@ public class MessageService implements IMessageService{
     // Inyeccion de dependencias Curso
     @Autowired
     private final MessageRepository messageRepository;
+
+    // Email
+    @Autowired
+    private final EmailHelper emailHelper;
 
     // Crear
     @Override
@@ -57,6 +66,22 @@ public class MessageService implements IMessageService{
         message.setUserReceiver(userReceiver);
         message.setUserSender(userSender);
         message.setCourse(course);
+
+        java.sql.Date sentDate = message.getSentDate();
+
+        if (sentDate != null) {
+
+            // Convertir java.sql.Date a LocalDate
+            LocalDate localDate = sentDate.toLocalDate();
+            
+            // Convertir LocalDate a LocalDateTime
+            LocalDateTime sentDateTime = localDate.atStartOfDay(); // Ajusta esto si necesitas una hora específica del día
+
+            if (Objects.nonNull(userReceiver.getEmail())) {
+                this.emailHelper.sendMail(userReceiver.getEmail(), userReceiver.getFullName(),
+                userSender.getFullName(), sentDateTime);
+            }
+        }
 
         return this.entityToResponse(this.messageRepository.save(message));
     }
