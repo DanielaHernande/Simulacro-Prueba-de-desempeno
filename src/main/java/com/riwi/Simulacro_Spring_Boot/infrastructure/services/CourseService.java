@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.riwi.Simulacro_Spring_Boot.api.dto.request.CourseReq;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.CourseResp;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.UserBasicResp;
-import com.riwi.Simulacro_Spring_Boot.api.dto.response.UserResp;
 import com.riwi.Simulacro_Spring_Boot.domain.entities.Course;
 import com.riwi.Simulacro_Spring_Boot.domain.entities.UserEntity;
 import com.riwi.Simulacro_Spring_Boot.domain.repositories.CourseRepository;
@@ -65,8 +64,6 @@ public class CourseService implements ICourseService{
         UserEntity user = this.userRepository.findById(request.getUserId())
                     .orElseThrow(() -> new BadRequestException("No ha un usuario con ese id suministrado"));
 
-        course = this.requestToEntity(request);
-
         course.setCourseName(request.getCourseName());
         course.setDescription(request.getDescription());
         course.setUserEntity(user);
@@ -94,16 +91,8 @@ public class CourseService implements ICourseService{
                 .map(this::entityToResponse);
     }
 
-    // Buscar por nombre
-    @Override
-    public UserResp findByName(String courseName) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByName'");
-    }
-
 
     // Metodos privados
-    
     // Convertir
     private CourseResp entityToResponse(Course entity) {
 

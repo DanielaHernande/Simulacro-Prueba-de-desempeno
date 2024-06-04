@@ -58,10 +58,11 @@ public class LessonService implements ILessonService{
         Lesson lesson = this.find(id);
 
         Course course = this.courseRepository.findById(request.getCourseId())
-        .orElseThrow(() -> new BadRequestException("No hay un curso con ese id suministrado"));
+            .orElseThrow(() -> new BadRequestException("No hay un curso con ese id suministrado"));
 
-        lesson = this.requestToEntity(request);
 
+        lesson.setLessonTitle(request.getLessonTitle());
+        lesson.setContent(request.getContent());
         lesson.setCourse(course);
 
         return this.entityToResponse(this.lessonRepository.save(lesson));
@@ -120,5 +121,4 @@ public class LessonService implements ILessonService{
         return this.lessonRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("No hay lesson con el id suministrado"));
     }
-    
 }

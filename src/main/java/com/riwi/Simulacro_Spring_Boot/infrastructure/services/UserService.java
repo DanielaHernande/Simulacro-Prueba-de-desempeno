@@ -51,7 +51,10 @@ public class UserService implements IUserService{
     public UserResp update(UserReq request, Long id) {
 
         UserEntity userEntity = this.findId(id);
+
         userEntity = this.requestToUser(request);
+        
+
         userEntity.setId(id);
 
         return this.entityToResponse(this.userRepository.save(userEntity));
