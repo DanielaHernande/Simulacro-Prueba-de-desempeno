@@ -45,7 +45,7 @@ public class SubmissionService implements ISubmissionService{
                 .orElseThrow(() -> new BadRequestException("No hay usuarios con ese id"));
 
         Assignment assignment = this.assignmentRepository.findById(request.getAssignmentId())
-                .orElseThrow(() -> new BadRequestException("No ha un usuario con ese id suministrado"));
+                .orElseThrow(() -> new BadRequestException("No ha un asignaciónes con ese id suministrado"));
 
         Submission submission = this.requestToEntity(request);
 
@@ -73,7 +73,7 @@ public class SubmissionService implements ISubmissionService{
                     .orElseThrow(() -> new BadRequestException("No ha un usuario con ese id suministrado"));
         
         Assignment assignment = this.assignmentRepository.findById(request.getAssignmentId())
-                    .orElseThrow(() -> new BadRequestException("No ha un usuario con ese id suministrado"));
+                    .orElseThrow(() -> new BadRequestException("No ha un asignaciónes con ese id suministrado"));
 
         submission.setContent(request.getContent());
         submission.setSubmissionDate(request.getSubmissionDate());
@@ -144,7 +144,6 @@ public class SubmissionService implements ISubmissionService{
     private Submission find(Long id) {
 
         return this.submissionRepository.findById(id)
-                .orElseThrow(() -> new BadRequestException("No hay cursos con el id suministrado"));
+                .orElseThrow(() -> new BadRequestException("No hay envíos con el id suministrado"));
     }
-    
 }

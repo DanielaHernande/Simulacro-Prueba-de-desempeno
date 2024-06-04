@@ -64,7 +64,6 @@ public class AssignmentService implements IAssignmentService{
         Lesson lesson = this.lessonRepository.findById(request.getLessonId())
                     .orElseThrow(() -> new BadRequestException("No hay una leccion con ese id suministrado"));
 
-
         assignment.setAssignmentTitle(request.getAssignmentTitle());
         assignment.setDescription(request.getDescription());
         assignment.setDueDate(request.getDueDate());

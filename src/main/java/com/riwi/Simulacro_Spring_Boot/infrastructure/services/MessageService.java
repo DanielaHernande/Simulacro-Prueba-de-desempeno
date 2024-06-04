@@ -52,14 +52,14 @@ public class MessageService implements IMessageService{
 
         // Obtener el usuario
         UserEntity userReceiver = this.userRepository.findById(request.getUserReceiverId())
-                    .orElseThrow(() -> new BadRequestException("No ha un usuario remitente con ese id suministrado"));
+                    .orElseThrow(() -> new BadRequestException("No hay un usuario remitente con ese id suministrado"));
 
         UserEntity userSender = this.userRepository.findById(request.getUserSenderId())
-                    .orElseThrow(() -> new BadRequestException("No ha un usuario remitente con ese id suministrado"));
+                    .orElseThrow(() -> new BadRequestException("No hay un usuario remitente con ese id suministrado"));
 
         // Cursos 
         Course course = this.courseRepository.findById(request.getCourseId())
-                    .orElseThrow(() -> new BadRequestException("No ha un curso con el id suministrado"));
+                    .orElseThrow(() -> new BadRequestException("No hay un curso con el id suministrado"));
 
         Message message = this.requestToEntity(request);
 
@@ -75,9 +75,10 @@ public class MessageService implements IMessageService{
             LocalDate localDate = sentDate.toLocalDate();
             
             // Convertir LocalDate a LocalDateTime
-            LocalDateTime sentDateTime = localDate.atStartOfDay(); // Ajusta esto si necesitas una hora específica del día
+            LocalDateTime sentDateTime = localDate.atStartOfDay();
 
             if (Objects.nonNull(userReceiver.getEmail())) {
+
                 this.emailHelper.sendMail(userReceiver.getEmail(), userReceiver.getFullName(),
                 userSender.getFullName(), sentDateTime);
             }
@@ -101,17 +102,16 @@ public class MessageService implements IMessageService{
 
         // Obtener el usuario
         UserEntity userReceiver = this.userRepository.findById(request.getUserReceiverId())
-                    .orElseThrow(() -> new BadRequestException("No ha un usuario remitente con ese id suministrado"));
+                    .orElseThrow(() -> new BadRequestException("No hay un usuario remitente con ese id suministrado"));
 
         UserEntity userSender = this.userRepository.findById(request.getUserSenderId())
-                    .orElseThrow(() -> new BadRequestException("No ha un usuario remitente con ese id suministrado"));
+                    .orElseThrow(() -> new BadRequestException("No hay un usuario remitente con ese id suministrado"));
 
         // Cursos 
         Course course = this.courseRepository.findById(request.getCourseId())
-                    .orElseThrow(() -> new BadRequestException("No ha un curso con el id suministrado"));
+                    .orElseThrow(() -> new BadRequestException("No hay un curso con el id suministrado"));
 
-        message = this.requestToEntity(request);
-
+                    
         message.setMessageContent(request.getMessageContent());
         message.setSentDate(request.getSentDate());
         message.setUserReceiver(userReceiver);
@@ -189,7 +189,7 @@ public class MessageService implements IMessageService{
     private Message find(Long id) {
 
         return this.messageRepository.findById(id)
-                .orElseThrow(() -> new BadRequestException("No hay cursos con el id suministrado"));
+                .orElseThrow(() -> new BadRequestException("No hay mensajes con el id suministrado"));
     }
     
 }

@@ -73,14 +73,13 @@ public class EnrollmentsService implements IEnrollmentsService{
 
         // Obtener el usuario
         UserEntity user = this.userRepository.findById(request.getUserId())
-                    .orElseThrow(() -> new BadRequestException("No ha un usuario con ese id suministrado"));
+                    .orElseThrow(() -> new BadRequestException("No hay un usuario con ese id suministrado"));
 
         // Obtener el usuario
         Course course = this.courseRepository.findById(request.getCourseId())
-                    .orElseThrow(() -> new BadRequestException("No ha un usuario con ese id suministrado"));
+                    .orElseThrow(() -> new BadRequestException("No hay un curso con ese id suministrado"));
 
-        enrollment = this.requestToEntity(request);
-
+        enrollment.setEnrollmentDate(request.getEnrollmentDate());
         enrollment.setCourse(course);
         enrollment.setUserEntity(user);
 
@@ -143,7 +142,6 @@ public class EnrollmentsService implements IEnrollmentsService{
     private Enrollment find(Long id) {
 
         return this.enrollmentRepository.findById(id)
-                .orElseThrow(() -> new BadRequestException("No hay cursos con el id suministrado"));
-    }
-    
+                .orElseThrow(() -> new BadRequestException("No hay Inscripciones con el id suministrado"));
+    }  
 }
