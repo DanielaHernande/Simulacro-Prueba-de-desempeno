@@ -18,10 +18,13 @@ import com.riwi.Simulacro_Spring_Boot.api.dto.request.MessageReq;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.MessageResp;
 import com.riwi.Simulacro_Spring_Boot.infrastructure.abstract_services.IMessageService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
+@Tag(name = "Messages")
 @RequestMapping(path = "/message")
 public class MessageController {
 
@@ -39,15 +42,19 @@ public class MessageController {
     }
 
     // Obtener por id
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/{message_id}")
     public ResponseEntity<MessageResp> get(
-            @PathVariable Long id) {
+            @PathVariable Long message_id) {
 
-        return ResponseEntity.ok(this.messageService.get(id));
+        return ResponseEntity.ok(this.messageService.get(message_id));
     }
 
     // Crear 
     @PostMapping
+    @Operation(
+        summary = "Send Message",
+        description = "Send a message from one user to another within a course."
+    )
     public ResponseEntity<MessageResp> create(
             @Validated @RequestBody MessageReq request) {
 
@@ -55,19 +62,19 @@ public class MessageController {
     }
 
     // Actualizar
-    @PutMapping(path = "/{id}")
+    @PutMapping(path = "/{message_id}")
     public ResponseEntity<MessageResp> update(
             @Validated @RequestBody MessageReq request,
-            @PathVariable Long id) {
+            @PathVariable Long message_id) {
 
-        return ResponseEntity.ok(this.messageService.update(request, id));
+        return ResponseEntity.ok(this.messageService.update(request, message_id));
     }
 
     // Eliminar 
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @DeleteMapping(path = "/{message_id}")
+    public ResponseEntity<Void> delete(@PathVariable Long message_id) {
         
-        this.messageService.delete(id);
+        this.messageService.delete(message_id);
         return ResponseEntity.noContent().build();
     }
     

@@ -18,10 +18,13 @@ import com.riwi.Simulacro_Spring_Boot.api.dto.request.LessonReq;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.LessonResp;
 import com.riwi.Simulacro_Spring_Boot.infrastructure.abstract_services.ILessonService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
+@Tag(name = "Lessons")
 @RequestMapping(path = "/lessons")
 public class LessonController {
 
@@ -31,6 +34,10 @@ public class LessonController {
 
     // Obtener todo
     @GetMapping
+    @Operation(
+        summary = " Get All Lessons",
+        description = "Get all lessons"
+    )
     public ResponseEntity<Page<LessonResp>> getAll(
 
             @RequestParam(defaultValue = "1") int page,
@@ -40,15 +47,23 @@ public class LessonController {
     }
 
     // Obtener uno solo
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/{lesson_id}")
+    @Operation(
+        summary = "Get Lesson Information",
+        description = "Obtain detailed information about a specific lesson."
+    )
     public ResponseEntity<LessonResp> get(
-            @PathVariable Long id) {
+            @PathVariable Long lesson_id) {
 
-        return ResponseEntity.ok(this.lessonService.get(id));
+        return ResponseEntity.ok(this.lessonService.get(lesson_id));
     }
 
     // Crear 
     @PostMapping
+    @Operation(
+        summary = "Create Lesson",
+        description = "Create a new lesson."
+    )
     public ResponseEntity<LessonResp> create(
             @Validated @RequestBody LessonReq request) {
 
@@ -56,19 +71,27 @@ public class LessonController {
     }
 
     // Actualizar
-    @PutMapping(path = "/{id}")
+    @PutMapping(path = "/{lesson_id}")
+    @Operation(
+        summary = "Update Lesson",
+        description = "Update the information of a lesson."
+    )
     public ResponseEntity<LessonResp> update(
             @Validated @RequestBody LessonReq request,
-            @PathVariable Long id) {
+            @PathVariable Long lesson_id) {
 
-        return ResponseEntity.ok(this.lessonService.update(request, id));
+        return ResponseEntity.ok(this.lessonService.update(request, lesson_id));
     }
 
     // Eliminar 
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @DeleteMapping(path = "/{lesson_id}")
+    @Operation(
+        summary = "Delete Lesson",
+        description = "Update the information of a lesson."
+    )
+    public ResponseEntity<Void> delete(@PathVariable Long lesson_id) {
         
-        this.lessonService.delete(id);
+        this.lessonService.delete(lesson_id);
         return ResponseEntity.noContent().build();
     }
     
