@@ -18,10 +18,13 @@ import com.riwi.Simulacro_Spring_Boot.api.dto.request.AssignmentReq;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.AssignmentResp;
 import com.riwi.Simulacro_Spring_Boot.infrastructure.abstract_services.IAssignmentService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
+@Tag(name = "Assignment")
 @RequestMapping(path = "/assignment")
 public class AssignmentController {
     
@@ -31,6 +34,10 @@ public class AssignmentController {
 
     // Obtener todo
     @GetMapping
+    @Operation(
+        summary = "Get All Tasks",
+        description = "Get All Tasks"
+    )
     public ResponseEntity<Page<AssignmentResp>> getAll(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
@@ -39,15 +46,23 @@ public class AssignmentController {
     }
 
     // Obtener por id
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/{assignment_id}")
+    @Operation(
+        summary = "Obtain Task Information",
+        description = "Obtener información detallada de una tarea específica."
+    )
     public ResponseEntity<AssignmentResp> get(
-            @PathVariable Long id) {
+            @PathVariable Long assignment_id) {
 
-        return ResponseEntity.ok(this.assignmentService.get(id));
+        return ResponseEntity.ok(this.assignmentService.get(assignment_id));
     }
 
     // Crear 
     @PostMapping
+    @Operation(
+        summary = "Create Task",
+        description = "Create Task"
+    )
     public ResponseEntity<AssignmentResp> create(
             @Validated @RequestBody AssignmentReq request) {
 
@@ -55,19 +70,27 @@ public class AssignmentController {
     }
 
     // Actualizar
-    @PutMapping(path = "/{id}")
+    @PutMapping(path = "/{assignment_id}")
+    @Operation(
+        summary = "Update Task",
+        description = "Update the information of a task."
+    )
     public ResponseEntity<AssignmentResp> update(
             @Validated @RequestBody AssignmentReq request,
-            @PathVariable Long id) {
+            @PathVariable Long assignment_id) {
 
-        return ResponseEntity.ok(this.assignmentService.update(request, id));
+        return ResponseEntity.ok(this.assignmentService.update(request, assignment_id));
     }
 
     // Eliminar 
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @DeleteMapping(path = "/{assignment_id}")
+    @Operation(
+        summary = "Delete Task",
+        description = "Delete a task."
+    )
+    public ResponseEntity<Void> delete(@PathVariable Long assignment_id) {
         
-        this.assignmentService.delete(id);
+        this.assignmentService.delete(assignment_id);
         return ResponseEntity.noContent().build();
     }
 }

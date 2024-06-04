@@ -18,10 +18,13 @@ import com.riwi.Simulacro_Spring_Boot.api.dto.request.CourseReq;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.CourseResp;
 import com.riwi.Simulacro_Spring_Boot.infrastructure.abstract_services.ICourseService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
+@Tag(name = "Courses")
 @RequestMapping(path = "/courses")
 public class CourseController {
 
@@ -31,6 +34,10 @@ public class CourseController {
 
     // Obtener todo
     @GetMapping
+    @Operation(
+        summary = "Get All Courses",
+        description = "Get a list of all courses."
+    )
     public ResponseEntity<Page<CourseResp>> getAll(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
@@ -40,6 +47,10 @@ public class CourseController {
 
     // Obtener por id
     @GetMapping(path = "/{id}")
+    @Operation(
+        summary = "Get Course Information",
+        description = "Obtain detailed information about a specific course."
+    )
     public ResponseEntity<CourseResp> get(
             @PathVariable Long id) {
 
@@ -48,6 +59,10 @@ public class CourseController {
 
     // Crear 
     @PostMapping
+    @Operation(
+        summary = "Create Course",
+        description = "Create a new course."
+    )
     public ResponseEntity<CourseResp> create(
             @Validated @RequestBody CourseReq request) {
 
@@ -56,6 +71,10 @@ public class CourseController {
 
     // Actualizar
     @PutMapping(path = "/{id}")
+    @Operation(
+        summary = "Update Course",
+        description = "Update the information of a course."
+    )
     public ResponseEntity<CourseResp> update(
             @Validated @RequestBody CourseReq request,
             @PathVariable Long id) {
@@ -65,6 +84,10 @@ public class CourseController {
 
     // Eliminar 
     @DeleteMapping(path = "/{id}")
+    @Operation(
+        summary = "Delete Course",
+        description = "Delete a course."
+    )
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         
         this.courseService.delete(id);

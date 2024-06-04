@@ -7,6 +7,8 @@ import com.riwi.Simulacro_Spring_Boot.api.dto.request.UserReq;
 import com.riwi.Simulacro_Spring_Boot.api.dto.response.UserResp;
 import com.riwi.Simulacro_Spring_Boot.infrastructure.abstract_services.IUserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @AllArgsConstructor
+@Tag(name = "Users")
 @RequestMapping(path = "/users")
 public class UserController {
 
@@ -32,6 +35,10 @@ public class UserController {
 
     // Obtener todo
     @GetMapping
+    @Operation(
+        summary = "Get users",
+        description = "Get all users"
+    )
     public ResponseEntity<Page<UserResp>> getll(
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "10") int size
@@ -40,15 +47,23 @@ public class UserController {
     }
 
     // Buscar por id
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/{user_id}")
+    @Operation(
+        summary = "Search for a user by id",
+        description = "Obtain detailed information about a specific user."
+    )
     public ResponseEntity<UserResp> getId(
-            @PathVariable Long id) {
+            @PathVariable Long user_id) {
 
-        return ResponseEntity.ok(this.userService.get(id));
+        return ResponseEntity.ok(this.userService.get(user_id));
     }
 
     // Crear
     @PostMapping
+    @Operation(
+        summary = "Create users",
+        description = "Create users with different roles"
+    )
     public ResponseEntity<UserResp> create(
             @Validated @RequestBody UserReq request) {
 
@@ -56,20 +71,28 @@ public class UserController {
     }
 
     // Actualizar
-    @PutMapping(path = "/{id}")
+    @PutMapping(path = "/{user_id}")
+    @Operation(
+        summary = "Update a user", 
+        description = "Update a user's information."
+    )
     public ResponseEntity<UserResp> update(
             @Validated @RequestBody UserReq request,
-            @PathVariable Long id) {
+            @PathVariable Long user_id) {
 
-        return ResponseEntity.ok(this.userService.update(request, id));
+        return ResponseEntity.ok(this.userService.update(request, user_id));
     }
 
     // Eliminar
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping(path = "/{user_id}")
+    @Operation(
+        summary = "Delete User",
+        description = "Delete a user by id."
+    )
     public ResponseEntity<Void> delete(
-            @PathVariable Long id) {
+            @PathVariable Long user_id) {
 
-        this.userService.delete(id);
+        this.userService.delete(user_id);
         return ResponseEntity.noContent().build();
     }
 }
