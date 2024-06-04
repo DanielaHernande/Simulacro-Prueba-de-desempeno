@@ -7,12 +7,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+/*
+ * Clase base para las respuestas de error.
+ * Implementa Serializable para permitir la serialización del objeto.
+ */
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class BaseErrorResp implements Serializable {
     
-    private String status;
-    private Integer code;
+    private String status; // Estado HTTP de la respuesta
+    private Integer code; // Código de error HTTP
 }
