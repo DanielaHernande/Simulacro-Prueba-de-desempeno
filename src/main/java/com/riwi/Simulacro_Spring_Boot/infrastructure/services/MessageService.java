@@ -50,25 +50,31 @@ public class MessageService implements IMessageService{
     @Override
     public MessageResp create(MessageReq request) {
 
-        // Obtener el usuario
+         // Obtener el usuario receptor por ID, lanzar excepción si no se encuentra
         UserEntity userReceiver = this.userRepository.findById(request.getUserReceiverId())
                     .orElseThrow(() -> new BadRequestException("No hay un usuario remitente con ese id suministrado"));
 
+        // Obtener el usuario remitente por ID, lanzar excepción si no se encuentra
         UserEntity userSender = this.userRepository.findById(request.getUserSenderId())
                     .orElseThrow(() -> new BadRequestException("No hay un usuario remitente con ese id suministrado"));
 
-        // Cursos 
+        // Obtener el curso por ID, lanzar excepción si no se encuentra
         Course course = this.courseRepository.findById(request.getCourseId())
                     .orElseThrow(() -> new BadRequestException("No hay un curso con el id suministrado"));
 
+
+        // Convertir la solicitud a entidad Message
         Message message = this.requestToEntity(request);
 
+        // Asignar el usuario receptor, remitente y curso al mensaje
         message.setUserReceiver(userReceiver);
         message.setUserSender(userSender);
         message.setCourse(course);
 
+        // Obtener la fecha de envío del mensaje
         java.sql.Date sentDate = message.getSentDate();
 
+        // Si la fecha de envío no es nula
         if (sentDate != null) {
 
             // Convertir java.sql.Date a LocalDate
@@ -77,6 +83,7 @@ public class MessageService implements IMessageService{
             // Convertir LocalDate a LocalDateTime
             LocalDateTime sentDateTime = localDate.atStartOfDay();
 
+             // Si el correo del receptor no es nulo, enviar un correo electrónico
             if (Objects.nonNull(userReceiver.getEmail())) {
 
                 this.emailHelper.sendMail(userReceiver.getEmail(), userReceiver.getFullName(),
@@ -84,6 +91,7 @@ public class MessageService implements IMessageService{
             }
         }
 
+        // Guardar el mensaje en el repositorio y devolver la respuesta
         return this.entityToResponse(this.messageRepository.save(message));
     }
 
@@ -91,6 +99,7 @@ public class MessageService implements IMessageService{
     @Override
     public MessageResp get(Long id) {
 
+        // Buscar el mensaje y convertirlo a respuesta
         return this.entityToResponse(this.find(id));
     }
 
@@ -98,26 +107,29 @@ public class MessageService implements IMessageService{
     @Override
     public MessageResp update(MessageReq request, Long id) {
 
+        // Buscar el mensaje existente por ID
         Message message = this.find(id);
 
-        // Obtener el usuario
+        // Obtener el usuario receptor por ID, lanzar excepción si no se encuentra
         UserEntity userReceiver = this.userRepository.findById(request.getUserReceiverId())
                     .orElseThrow(() -> new BadRequestException("No hay un usuario remitente con ese id suministrado"));
 
+        // Obtener el usuario remitente por ID, lanzar excepción si no se encuentra
         UserEntity userSender = this.userRepository.findById(request.getUserSenderId())
                     .orElseThrow(() -> new BadRequestException("No hay un usuario remitente con ese id suministrado"));
 
-        // Cursos 
+        // Obtener el curso por ID, lanzar excepción si no se encuentra
         Course course = this.courseRepository.findById(request.getCourseId())
                     .orElseThrow(() -> new BadRequestException("No hay un curso con el id suministrado"));
 
-                    
+        // Actualizar el contenido del mensaje, la fecha de envío, el usuario receptor, el remitente y el curso   
         message.setMessageContent(request.getMessageContent());
         message.setSentDate(request.getSentDate());
         message.setUserReceiver(userReceiver);
         message.setUserSender(userSender);
         message.setCourse(course);
 
+        // Guardar el mensaje actualizado en el repositorio y devolver la respuesta
         return this.entityToResponse(this.messageRepository.save(message));
     }
 
@@ -125,6 +137,7 @@ public class MessageService implements IMessageService{
     @Override
     public void delete(Long id) {
 
+        // Eliminar el mensaje del repositorio
         this.messageRepository.delete(this.find(id));
     }
 
@@ -132,10 +145,13 @@ public class MessageService implements IMessageService{
     @Override
     public Page<MessageResp> getAll(int page, int size) {
 
+        // Ajustar el número de página si es necesario
         if (page < 0) page = 1;
 
+        // Crear objeto de paginación
         PageRequest pagination = PageRequest.of(page - 1, size);
 
+        // Obtener todos los mensajes paginados y convertirlos a respuestas
         return this.messageRepository.findAll(pagination)
                 .map(this::entityToResponse);
     }
@@ -160,13 +176,15 @@ public class MessageService implements IMessageService{
             BeanUtils.copyProperties(entity.getUserSender(), userSender);
         }
 
-        // Curso
+        // Crear objeto básico de respuesta para el curso
         CourseBasicResp course = new CourseBasicResp();
 
+        // Copiar propiedades del curso si no es nulo
         if (entity.getCourse() != null) {
             BeanUtils.copyProperties(entity.getCourse(), course);
         }
 
+        // Construir y devolver la respuesta del mensaje
         return MessageResp.builder()
                 .id(entity.getId())
                 .messageContent(entity.getMessageContent())
@@ -177,6 +195,7 @@ public class MessageService implements IMessageService{
                 .build();
     }
     
+    // Convertir solicitud MessageReq a entidad Message
     private Message requestToEntity(MessageReq requets) {
 
         return Message.builder()
@@ -185,7 +204,7 @@ public class MessageService implements IMessageService{
                 .build();
     }
 
-    // Buscar por id
+    // Buscar mensaje por ID y lanzar excepción si no se encuentra
     private Message find(Long id) {
 
         return this.messageRepository.findById(id)

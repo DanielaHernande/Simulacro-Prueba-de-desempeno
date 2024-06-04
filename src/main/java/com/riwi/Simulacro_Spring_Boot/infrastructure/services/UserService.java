@@ -34,8 +34,10 @@ public class UserService implements IUserService{
     @Override
     public UserResp create(UserReq request) {
 
+         // Convertir la solicitud a entidad UserEntity
         UserEntity userEntity = this.requestToUser(request);
 
+        // Guardar el usuario en el repositorio y devolver la respuesta
         return this.entityToResponse(this.userRepository.save(userEntity));
     }
 
@@ -43,6 +45,7 @@ public class UserService implements IUserService{
     @Override
     public UserResp get(Long id) {
 
+        // Buscar el usuario y convertirlo a respuesta
         return this.entityToResponse(this.findId(id));
     }
 
@@ -50,13 +53,14 @@ public class UserService implements IUserService{
     @Override
     public UserResp update(UserReq request, Long id) {
 
+        // Buscar el usuario existente por ID
         UserEntity userEntity = this.findId(id);
 
+        // Actualizar el usuario con los datos de la solicitud
         userEntity = this.requestToUser(request);
-        
-
         userEntity.setId(id);
 
+         // Guardar el usuario actualizado en el repositorio y devolver la respuesta
         return this.entityToResponse(this.userRepository.save(userEntity));
     }
 
@@ -64,6 +68,7 @@ public class UserService implements IUserService{
     @Override
     public void delete(Long id) {
 
+        // Eliminar el usuario del repositorio
         this.userRepository.delete(this.findId(id));
     }
 
@@ -71,10 +76,13 @@ public class UserService implements IUserService{
     @Override
     public Page<UserResp> getAll(int page, int size) {
 
+        // Ajustar el número de página si es necesario
         if (page < 0) page = 0;
 
+        // Crear objeto de paginación
         PageRequest pagination = PageRequest.of(page, size);
 
+        // Obtener todos los usuarios paginados y convertirlos a respuestas
         return this.userRepository.findAll(pagination)
                 .map(user -> this.entityToResponse(user));     
     }
@@ -83,18 +91,21 @@ public class UserService implements IUserService{
     @Override
     public UserResp getById(Long id) {
 
+         // Buscar el usuario y convertirlo a respuesta
         return this.entityToResponse(findId(id));
     }
 
     // Metodos privados
     
-    // Para convertir userResp a company
+    // Convertir entidad UserEntity a respuesta UserResp
     private UserResp entityToResponse(UserEntity entity) {
 
         UserResp response = new UserResp();
 
+        // Copiar propiedades del usuario a la respuesta
         BeanUtils.copyProperties(entity, response);
         
+         // Convertir y asignar cursos si existen
         if (entity.getCourses() != null) {
             
             response.setCourses(entity.getCourses().stream()
@@ -120,7 +131,7 @@ public class UserService implements IUserService{
                 .build();
     }
 
-    // 
+    // Convertir solicitud UserReq a entidad UserEntity
     private UserEntity requestToUser(UserReq request) {
 
         return UserEntity.builder()
@@ -132,6 +143,7 @@ public class UserService implements IUserService{
                 .build();
     }
 
+    // Buscar usuario por ID y lanzar excepción si no se encuentra
     private UserEntity findId(Long id) {
 
         return this.userRepository.findById(id)

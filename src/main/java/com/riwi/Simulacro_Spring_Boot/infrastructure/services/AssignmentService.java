@@ -37,7 +37,7 @@ public class AssignmentService implements IAssignmentService{
         Lesson lesson = this.lessonRepository.findById(request.getLessonId())
                     .orElseThrow(() -> new BadRequestException("No hay una leccion con ese id"));
 
-        // tarea
+        // Convertir el DTO a una entidad Assignment
         Assignment assignment = this.requestToEntity(request);
 
         // Asignar la lección a la tarea
@@ -51,6 +51,7 @@ public class AssignmentService implements IAssignmentService{
     @Override
     public AssignmentResp get(Long id) {
         
+        // Buscar y devolver la tarea por su ID
         return this.entityToResponse(this.find(id));
     }
 
@@ -58,17 +59,21 @@ public class AssignmentService implements IAssignmentService{
     @Override
     public AssignmentResp update(AssignmentReq request, Long id) {
 
+        // Obtener la tarea por su ID
         Assignment assignment = this.find(id);
 
-        // Obtener el usuario
+        // Obtener la lección por su ID
         Lesson lesson = this.lessonRepository.findById(request.getLessonId())
                     .orElseThrow(() -> new BadRequestException("No hay una leccion con ese id suministrado"));
 
+        
+        // Actualizar los campos de la tarea con los datos del DTO
         assignment.setAssignmentTitle(request.getAssignmentTitle());
         assignment.setDescription(request.getDescription());
         assignment.setDueDate(request.getDueDate());
         assignment.setLesson(lesson);
 
+        // Guardar los cambios en el repositorio de asignaciones
         return this.entityToResponse(this.assignmentRepository.save(assignment));
     }
 
@@ -76,6 +81,7 @@ public class AssignmentService implements IAssignmentService{
     @Override
     public void delete(Long id) {
         
+        // Eliminar la tarea por su ID
         this.assignmentRepository.delete(this.find(id));
     }
 
@@ -83,26 +89,30 @@ public class AssignmentService implements IAssignmentService{
     @Override
     public Page<AssignmentResp> getAll(int page, int size) {
 
+        // Validar la página para asegurarse de que no sea negativa
         if (page < 0) page = 1;
 
+        // Configurar la paginación para la consulta
         PageRequest pagination = PageRequest.of(page - 1, size);
 
+        // Obtener todas las tareas con paginación y convertirlas a DTOs
         return this.assignmentRepository.findAll(pagination)
                 .map(this::entityToResponse);
     }
 
     // Metodos privados
     
-    // Convertir
+    // Convertir entidad Assignment a DTO AssignmentResp
     private AssignmentResp entityToResponse(Assignment entity) {
 
         Lesson lesson = new Lesson();
 
-        // Validar que el usuario es nulo 
+        // Verificar si la lección no es nula y copiar propiedades si existe
         if (entity.getLesson() != null) {
             BeanUtils.copyProperties(entity.getLesson(), lesson);
         }
 
+        // Crear y retornar un DTO AssignmentResp
         return AssignmentResp.builder()
                 .id(entity.getId())
                 .assignmentTitle(entity.getAssignmentTitle())
@@ -111,8 +121,10 @@ public class AssignmentService implements IAssignmentService{
                 .build();
     }
     
+    // Convertir DTO AssignmentReq a entidad Assignment
     private Assignment requestToEntity(AssignmentReq requets) {
 
+        // Crear y retornar una entidad Assignment a partir de un DTO AssignmentReq
         return Assignment.builder()
                 .assignmentTitle(requets.getAssignmentTitle())
                 .description(requets.getDescription())
@@ -122,6 +134,7 @@ public class AssignmentService implements IAssignmentService{
     // Buscar por id
     private Assignment find(Long id) {
 
+        // Buscar y retornar una tarea por su ID, o lanzar una excepción BadRequestException si no se encuentra
         return this.assignmentRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("No hay una tarea con el id suministrado"));
     }
