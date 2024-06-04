@@ -26,15 +26,19 @@ public class EmailHelper {
     // Metodo para enviar el email
     public void sendMail(String destinity, String nameReceiver, String nameSender, LocalDateTime date) {
 
+        // Creación de un nuevo mensaje MIME
         MimeMessage message = mailSender.createMimeMessage();
 
+        // Formateador de fecha y hora para la fecha del mensaje
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
         String dateMessage = date.format(formatter);
+
+        // Lectura del contenido HTML de la plantilla
         String htmlContent = this.readHTMLTemplate(nameReceiver, nameSender, dateMessage);
 
         try {
             
+            // Configuración del remitente, destinatario, asunto y contenido del mensaje
             message.setFrom(new InternetAddress("danielajimenezhernandez6@gmail.com")); // Direccion de correo de la aplicacion
             message.setSubject("Confirmacion de envio de mensaje en Riwi"); // Asunto del correo 
 
@@ -49,6 +53,7 @@ public class EmailHelper {
         }
     }
 
+    // Método para leer la plantilla HTML y reemplazar marcadores de posición con datos reales
     private String readHTMLTemplate(String nameReceiver, String nameSender, String date) {
 
         // Indicar en donde se encuentra el template
@@ -58,6 +63,7 @@ public class EmailHelper {
 
             var html = lines.collect(Collectors.joining()); // Unir las lineas que estan separadas
 
+            // Reemplazar marcadores de posición en el template con datos reales
             return html.replace("name", nameSender).replace("userReceiver", nameReceiver).replace("date", date);
             
 
